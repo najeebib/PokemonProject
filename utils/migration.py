@@ -8,7 +8,6 @@ def load_db():
             content = f.read()
             content = json.loads(content)
             for pokemon in content:
-                pokemon_id = pokemon["id"]
                 pokemon_name = pokemon["name"]
                 pokemon_weight = pokemon["weight"]
                 pokemon_height = pokemon["height"]
