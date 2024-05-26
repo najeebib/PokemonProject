@@ -1,13 +1,14 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from .database import base
 from sqlalchemy.orm import relationship
+from .pokemon_type import JSONString
 
 class Pokemon(base):
     __tablename__ = 'Pokemons'
 
     pokemon_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(50), unique=True)
-    pokemon_type = Column(String(20))
+    pokemon_type = Column(JSONString(255))
     height = Column(Integer)
     weight = Column(Integer)
 
