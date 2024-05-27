@@ -7,8 +7,8 @@ from data.database import get_db
 from sqlalchemy import text
 from models.trainer import Trainer
 from models.pokemon import Pokemon
-import utils.select_queries as select_fns 
-
+import utils.sql_queries as fns
+import utils.select_queries as select_fns
 
 router = APIRouter()
 
@@ -25,13 +25,11 @@ def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
 
 @router.get('/pokemonByTrainer/{trainer_name}')
 def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
-    return select_fns.select_pokemons_by_trainer(db, trainer_name)
+    return select_fns.slecte_pokemons_by_trainer(db, trainer_name)
 
-@router.get('/trainersOfPokemon')
+@router.get('/trainersOfPokemon/{pokemon_name}')
 def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
-    # get all trainers by pokemon
-
-    pass
+    return select_fns.select_trainers_by_pokemonName(db, pokemon_name)
 
 @router.delete('/deletePokemonFromTrainer')
 def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
