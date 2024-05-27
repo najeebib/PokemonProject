@@ -7,6 +7,7 @@ from data.database import get_db
 from sqlalchemy import text
 from models.trainer import Trainer
 from models.pokemon import Pokemon
+import utils.select_queries as select_fns 
 
 
 router = APIRouter()
@@ -14,20 +15,17 @@ router = APIRouter()
 @router.post('/addPokemon')
 def add_pokemon(pokemon: Pokemon, trainer: Trainer, db: Session = Depends(get_db)):
     # Add a pokemon to the pokemons db
+    
 
     pass
 
-@router.get('/pokemonByType')
+@router.get('/pokemonByType/{type}')
 def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
-    # get pokemon by type
+    return select_fns.select_pokemons_by_type(db, type)
 
-    pass
-
-@router.get('/pokemonByTrainer')
+@router.get('/pokemonByTrainer/{trainer_name}')
 def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
-    # get pokemon by trainer
-
-    pass
+    return select_fns.select_pokemons_by_trainer(db, trainer_name)
 
 @router.get('/trainersOfPokemon')
 def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
