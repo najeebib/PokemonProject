@@ -10,7 +10,8 @@ from models.pokemon import Pokemon
 import utils.sql_queries as fns
 import utils.select_queries as select_fns
 import utils.delete_queries as delete_fns
-
+import utils.evolution_fns as evolve_fns
+import requests
 router = APIRouter()
 
 @router.post('/addPokemon')
@@ -73,8 +74,16 @@ def add_pokemon_from_trainer(trainer_name: str, pokemon_name: str, db: Session =
 
 
 
-@router.put('/evolve')
+@router.put('/evolve/{pokemon_name}/{trainer_name}')
 def evolve(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
-    # evolve a trainers pokemon
-
-    pass
+    chain = evolve_fns.get_evolution_chain(pokemon_name)
+    next_evolution = evolve_fns.get_next_evolution(chain, pokemon_name)
+    old_pokemon = select_fns.select_pokemon(db, pokemon_name)
+    pokemon = select_fns.select_pokemon(db, next_evolution)
+    trainer = select_fns.select_trainer(db, trainer_name)
+    if  fns.is_in_pokedex(db, old_pokemon.pokemon_id, trainer.trainer_id) and not fns.is_in_pokedex(db, pokemon.pokemon_id, trainer.trainer_id):
+        delete_fns.delete_from_pokedex(db, trainer.trainer_id, old_pokemon.pokemon_id)
+        fns.insert_into_Pokedex_table(db, pokemon.pokemon_id, trainer.trainer_id)
+    else:
+        raise HTTPException(403, detail="Cant evolve this pokemon")
+            
