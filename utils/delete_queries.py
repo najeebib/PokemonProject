@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from sqlalchemy.orm import Session
-import sql_queries as fns
+import utils.sql_queries as fns
 
 
 def delete_from_pokedex(db: Session, trainer_id: int, pokemon_id: int):
