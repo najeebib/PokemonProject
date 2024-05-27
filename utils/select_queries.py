@@ -16,44 +16,40 @@ def select_pokemon(db: Session, pokemon_name: str):
 
 
 def select_pokemons_by_type(db: Session, pokemon_type: str):
-    result = db.execute(text(f"SELECT p.name FROM pokemons p JOIN pokemontypes pt ON p.pokemon_id = pt.pokemon_id JOIN types t ON pt.type_id = t.types_id WHERE t.pokemon_type = '{pokemon_type}' ORDER BY p.name")).fetchall()
+    query = text("""
+        SELECT pokemon.name
+        FROM pokemons pokemon
+        JOIN pokemontypes pokemontype ON pokemon.pokemon_id = pokemontype.pokemon_id
+        JOIN types type ON pokemontype.type_id = type.types_id
+        WHERE type.pokemon_type = :pokemon_type
+        ORDER BY pokemon.name
+    """)
+    result = db.execute(query, {"pokemon_type": pokemon_type}).fetchall()
     pokemons = [row[0] for row in result]
     return pokemons
 
-def select_pokemons_by_type(db: Session, pokemon_type: str):
-    pass
-
 def slecte_pokemons_by_trainer(db: Session, trainer_name: str):
-    trainer = select_trainer(db, trainer_name)
-
-    trainer_id = trainer.trainer_id
-    
-    result = db.execute(text(f"SELECT pokemon_id FROM `pokedex` WHERE trainer_id = {trainer_id}")).fetchall()
-
-    pokemon_objs = []
-    for row in result:
-        pokemon_objs.append(row._mapping)
-    
-    pokemons = []
-    for pokemon_obj in pokemon_objs:
-        pokemon = db.execute(text(f"SELECT * FROM `pokemons` WHERE pokemon_id = {pokemon_obj['pokemon_id']}")).fetchone()
-        pokemons.append(pokemon._mapping)
-
+    query = text("""
+        SELECT pokemon.name
+        FROM pokemons pokemon
+        JOIN pokedex pd ON pokemon.pokemon_id = pd.pokemon_id
+        JOIN trainers trainer ON pd.trainer_id = trainer.trainer_id
+        WHERE trainer.name = :trainer_name
+        ORDER BY pokemon.name
+    """)
+    result = db.execute(query, {"trainer_name": trainer_name}).fetchall()
+    pokemons = [row._mapping for row in result]
     return pokemons
 
 def select_trainers_by_pokemonName(db: Session, pokemon_name: str):
-    pokemon = select_pokemon(db, pokemon_name)
-    pokemon_id = pokemon.pokemon_id
-
-    result = db.execute(text(f"SELECT trainer_id FROM `pokedex` WHERE pokemon_id = {pokemon_id}")).fetchall()
-
-    trainer_objs = []
-    for row in result:
-        trainer_objs.append(row._mapping)
-    
-    trainers = []
-    for trainer_obj in trainer_objs:
-        trainer = db.execute(text(f"SELECT * FROM `trainers` WHERE trainer_id = {trainer_obj['trainer_id']}")).fetchone()
-        trainers.append(trainer._mapping)
-
+    query = text("""
+        SELECT trainer.name
+        FROM trainers trainer
+        JOIN pokedex pd ON trainer.trainer_id = pd.trainer_id
+        JOIN pokemons pokemon ON pd.pokemon_id = pokemon.pokemon_id
+        WHERE pokemon.name = :pokemon_name
+        ORDER BY trainer.name
+    """)
+    result = db.execute(query, {"pokemon_name": pokemon_name}).fetchall()
+    trainers = [row._mapping for row in result]
     return trainers
