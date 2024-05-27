@@ -6,7 +6,11 @@ from utils.migration import load_db
 
 app  = FastAPI()
 models.base.metadata.create_all(bind=engine)
-load_db()
+
+@app.get("/migration")
+def migration():
+    load_db()
+
 app.include_router(pokemon_routes.router)
 @app.middleware("http")
 async def log_req(request:Request, call_next):
