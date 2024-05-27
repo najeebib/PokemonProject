@@ -10,7 +10,7 @@ def select_trainer(db: Session, trainer_name: str):
     result = db.execute(text(f"SELECT * FROM `trainers` WHERE name = '{trainer_name}'")).fetchone()
     return result
   
-  def select_pokemon(db: Session, pokemon_name: str):
+def select_pokemon(db: Session, pokemon_name: str):
     result = db.execute(text(f"SELECT * FROM `pokemons` WHERE name = '{pokemon_name}'")).fetchone()
     return result
 
