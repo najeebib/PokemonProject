@@ -9,10 +9,16 @@ def select_type(db: Session, pokemon_type: str):
 def select_trainer(db: Session, trainer_name: str):
     result = db.execute(text(f"SELECT * FROM `trainers` WHERE name = '{trainer_name}'")).fetchone()
     return result
-
-def select_pokemon(db: Session, pokemon_name: str):
+  
+  def select_pokemon(db: Session, pokemon_name: str):
     result = db.execute(text(f"SELECT * FROM `pokemons` WHERE name = '{pokemon_name}'")).fetchone()
     return result
+
+
+def select_pokemons_by_type(db: Session, pokemon_type: str):
+    result = db.execute(text(f"SELECT p.name FROM pokemons p JOIN pokemontypes pt ON p.pokemon_id = pt.pokemon_id JOIN types t ON pt.type_id = t.types_id WHERE t.pokemon_type = '{pokemon_type}' ORDER BY p.name")).fetchall()
+    pokemons = [row[0] for row in result]
+    return pokemons
 
 def select_pokemons_by_type(db: Session, pokemon_type: str):
     pass

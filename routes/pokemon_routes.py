@@ -15,14 +15,13 @@ router = APIRouter()
 @router.post('/addPokemon')
 def add_pokemon(pokemon: Pokemon, trainer: Trainer, db: Session = Depends(get_db)):
     # Add a pokemon to the pokemons db
+    
 
     pass
 
-@router.get('/pokemonByType')
+@router.get('/pokemonByType/{type}')
 def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
-    # get pokemon by type
-
-    pass
+    return select_fns.select_pokemons_by_type(db, type)
 
 @router.get('/pokemonByTrainer/{trainer_name}')
 def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
