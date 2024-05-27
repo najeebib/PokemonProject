@@ -20,14 +20,14 @@ def is_trainer_in_table(db: Session, trainer_name: str):
         return True
     return False
 
-def is_in_pokedex(db: Session, pokemon_name: str, trainer_name: str):
-    result = db.execute(text(f"SELECT * FROM `pokedex` WHERE pokemon_name = '{pokemon_name}' AND trainer_name = '{trainer_name}'")).fetchone()
+def is_in_pokedex(db: Session, pokemon_id: int, trainer_id: int):
+    result = db.execute(text(f"SELECT * FROM `pokedex` WHERE pokemon_id = {pokemon_id} AND trainer_id = {trainer_id}")).fetchone()
     if result:
         return True
     return False
 
-def is_in_pokemontype(db: Session, pokemon_name: str, pokemon_type: str):
-    result = db.execute(text(f"SELECT * FROM `pokemontypes` WHERE pokemon_name = '{pokemon_name}' AND pokemon_type = '{pokemon_type}'")).fetchone()
+def is_in_pokemontype(db: Session, pokemon_id: int, type_id: int):
+    result = db.execute(text(f"SELECT * FROM `pokemontypes` WHERE pokemon_id = {pokemon_id} AND type_id = {type_id}")).fetchone()
     if result:
         return True
     return False
@@ -87,37 +87,36 @@ def insert_into_trainers_table(db: Session, name: str, town: str):
         )
         db.commit()
 
-def insert_into_PokemonTypes_table(db: Session, pokemon_name: str, types: list):
-    for pokemon_type in types:
-        if not is_in_pokemontype(db, pokemon_name, pokemon_type):
-            query = text("""
-                        INSERT INTO `pokemontypes` 
-                        (pokemon_name, pokemon_type) 
-                        VALUES 
-                        (:pokemon_name, :pokemon_type)
-                    """)
-            db.execute(
-                query,
-                {
-                    "pokemon_name": pokemon_name,
-                    "pokemon_type": pokemon_type
-                }
-            )
-            db.commit()
-
-def insert_into_Pokedex_table(db: Session, pokemon_name: str, trainer_name: str):
-    if not is_in_pokedex(db, pokemon_name, trainer_name):
+def insert_into_PokemonTypes_table(db: Session, pokemon_id: int, type_id: int):
+    if not is_in_pokemontype(db, pokemon_id, type_id):
         query = text("""
-                    INSERT INTO `pokedex` 
-                    (pokemon_name, trainer_name) 
+                    INSERT INTO `pokemontypes` 
+                    (pokemon_id, type_id) 
                     VALUES 
-                    (:pokemon_name, :trainer_name)
+                    (:pokemon_id, :type_id)
                 """)
         db.execute(
             query,
             {
-                "pokemon_name": pokemon_name,
-                "trainer_name": trainer_name
+                "pokemon_id": pokemon_id,
+                "type_id": type_id
+            }
+        )
+        db.commit()
+
+def insert_into_Pokedex_table(db: Session, pokemon_id: int, trainer_id: int):
+    if not is_in_pokedex(db, pokemon_id, trainer_id):
+        query = text("""
+                    INSERT INTO `pokedex` 
+                    (pokemon_id, trainer_id) 
+                    VALUES 
+                    (:pokemon_id, :trainer_id)
+                """)
+        db.execute(
+            query,
+            {
+                "pokemon_id": pokemon_id,
+                "trainer_id": trainer_id
             }
         )
         db.commit()

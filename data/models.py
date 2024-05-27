@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, ForeignKey
 from .database import base
 from sqlalchemy.orm import relationship
 
@@ -16,16 +16,16 @@ class Pokemon(base):
 class Types(base):
     __tablename__ = 'Types'
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    types_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     pokemon_type = Column(String(50), unique=True)
     types = relationship('PokemonTypes', back_populates='types')
 
 class PokemonTypes(base):
     __tablename__ = 'PokemonTypes'
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    pokemon_name = Column(String(50), ForeignKey('Pokemons.name'))
-    pokemon_type = Column(String(50), ForeignKey('Types.pokemon_type'))
+    pokemon_types_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    pokemon_id = Column(Integer, ForeignKey('Pokemons.pokemon_id'))
+    type_id = Column(Integer, ForeignKey('Types.types_id'))
 
     pokemon = relationship('Pokemon', back_populates='type_of_pokemon')
     types = relationship('Types', back_populates='types')
@@ -33,6 +33,7 @@ class PokemonTypes(base):
 class Trainer(base):
     __tablename__ = 'Trainers'
 
+    trainer_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     name = Column(String(50),primary_key=True, unique=True)
     town = Column(String(50))
 
@@ -41,9 +42,9 @@ class Trainer(base):
 class Pokedex(base):
     __tablename__ = 'Pokedex'
 
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    pokemon_name = Column(String(50), ForeignKey('Pokemons.name'))
-    trainer_name = Column(String(50), ForeignKey('Trainers.name'))
+    pokedex_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    pokemon_id = Column(Integer, ForeignKey('Pokemons.pokemon_id'))
+    trainer_id = Column(Integer, ForeignKey('Trainers.trainer_id'))
 
     pokemon = relationship('Pokemon', back_populates='owned_by')
     trainer = relationship('Trainer', back_populates='pokemons')

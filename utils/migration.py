@@ -2,12 +2,15 @@ import json
 from .sql_queries import insert_into_pokemons_table, insert_into_types_table, insert_into_trainers_table, insert_into_Pokedex_table, insert_into_PokemonTypes_table
 from data.database import get_db
 import requests
+from data.models import  Types,  Trainer 
+
 def load_db():
     try:
         with open("./data/pokemons_data.json", "r") as f:
             content = f.read()
             content = json.loads(content)
             for pokemon in content:
+                pokemon_id = pokemon["id"]
                 pokemon_name = pokemon["name"]
                 pokemon_weight = pokemon["weight"]
                 pokemon_height = pokemon["height"]
@@ -28,18 +31,24 @@ def load_db():
                     if type not in types:
                         types.append(type["type"]["name"])
 
-                owners = pokemon["ownedBy"]
+                
                 db_generator = get_db()
                 db = next(db_generator)
 
                 insert_into_pokemons_table(db, pokemon_name, pokemon_height, pokemon_weight)
                 insert_into_types_table(db, types)
-                insert_into_PokemonTypes_table(db, pokemon_name, types)
+
+                for pokemon_type in types:
+                    type_obj = db.query(Types).filter_by(pokemon_type=pokemon_type).first()
+                    insert_into_PokemonTypes_table(db, pokemon_id, type_obj.types_id)
+
+                owners = pokemon["ownedBy"]
                 for trainer in owners:
                     trainer_name = trainer["name"]
                     trainer_town = trainer["town"]
                     insert_into_trainers_table(db, trainer_name, trainer_town)
-                    insert_into_Pokedex_table(db, pokemon_name, trainer_name)
+                    trainer_obj = db.query(Trainer).filter_by(name=trainer_name).first()
+                    insert_into_Pokedex_table(db, pokemon_id, trainer_obj.trainer_id)
     except FileNotFoundError:
         print(f"File not found.")
         return
