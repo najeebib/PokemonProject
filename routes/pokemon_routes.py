@@ -11,7 +11,7 @@ import utils.sql_queries as fns
 
 router = APIRouter()
 
-@router.post('/add_pokemon')
+@router.post('/addPokemon')
 def add_pokemon(pokemon: Pokemon, trainer: Trainer, db: Session = Depends(get_db)):
     # Add a pokemon to the pokemons db
 
