@@ -11,43 +11,44 @@ from models.pokemon import Pokemon
 
 router = APIRouter()
 
-@router.post("/pokemon/", response_model=Pokemon)
-def create_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
-    db_pokemon = Pokemon(name=pokemon.name, type=pokemon.type, height=pokemon.height, weight=pokemon.weight)
-    db.add(db_pokemon)
-    db.commit()
-    db.refresh(db_pokemon)
-    return db_pokemon
+@router.post('/addPokemon')
+def add_pokemon(pokemon: Pokemon, trainer: Trainer, db: Session = Depends(get_db)):
+    # Add a pokemon to the pokemons db
 
+    pass
 
-@router.get("/pokemon/{pokemon_id}", response_model=Pokemon)
-def read_pokemon(pokemon_id: int, db: Session = Depends(get_db)):
-    db_pokemon = db.query(Pokemon).filter(Pokemon.id == pokemon_id).first()
-    if db_pokemon is None:
-        raise HTTPException(status_code=404, detail="Pokemon not found")
-    return db_pokemon
+@router.get('/pokemonByType')
+def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
+    # get pokemon by type
 
+    pass
 
-@router.put("/pokemon/{pokemon_id}", response_model=Pokemon)
-def update_pokemon(pokemon_id: int, pokemon: Pokemon, db: Session = Depends(get_db)):
-    db_pokemon = db.query(Pokemon).filter(Pokemon.id == pokemon_id).first()
-    if db_pokemon is None:
-        raise HTTPException(status_code=404, detail="Pokemon not found")
-    for var, value in vars(pokemon).items():
-        setattr(db_pokemon, var, value) if value else None
-    db.commit()
-    db.refresh(db_pokemon)
-    return db_pokemon
+@router.get('/pokemonByTrainer')
+def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
+    # get pokemon by trainer
 
+    pass
 
-@router.delete("/pokemon/{pokemon_id}")
-def delete_pokemon(pokemon_id: int, db: Session = Depends(get_db)):
-    db_pokemon = db.query(Pokemon).filter(Pokemon.id == pokemon_id).first()
-    if db_pokemon is None:
-        raise HTTPException(status_code=404, detail="Pokemon not found")
-    db.delete(db_pokemon)
-    db.commit()
-    return {"message": "Pokemon deleted"}
+@router.get('/trainersOfPokemon')
+def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
+    # get all trainers by pokemon
 
+    pass
 
-# TODO: 
+@router.delete('/deletePokemonFromTrainer')
+def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
+    # delete pokemon from a trainer
+
+    pass
+
+@router.post('/addPokemonToTrainer')
+def add_pokemon_from_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
+    # add pokemon to a trainer
+
+    pass
+
+@router.put('/evolve')
+def evolve(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
+    # evolve a trainers pokemon
+
+    pass
