@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-05-27T07:08:33.134Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="W25kEc021Uit2nMaA2QS" version="24.4.8" type="device">
+<mxfile host="app.diagrams.net" modified="2024-05-27T10:48:43.412Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="ypBvqyAMtel5cxzAcIhk" version="24.4.8" type="device">
   <diagram name="Page-1" id="UsmaYbHlR8qYMjK1fiK9">
-    <mxGraphModel dx="877" dy="471" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1052" dy="566" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,7 +10,7 @@
         <mxCell id="yLZtfS4gvyToNNBfHDFI-2" value="+Id (primary key)&lt;br&gt;&lt;div&gt;+pokemonName&lt;/div&gt;&lt;div&gt;+height&lt;/div&gt;&lt;div&gt;+weight&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" parent="yLZtfS4gvyToNNBfHDFI-1" vertex="1">
           <mxGeometry y="50" width="160" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="yLZtfS4gvyToNNBfHDFI-5" value="Owned" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="yLZtfS4gvyToNNBfHDFI-5" value="Pokedex" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="330" y="20" width="170" height="120" as="geometry" />
         </mxCell>
         <mxCell id="yLZtfS4gvyToNNBfHDFI-6" value="+id (promary key)&lt;div&gt;+trainer_id (foreign key)&lt;/div&gt;&lt;div&gt;+pokemon_id (foreign key)&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" parent="yLZtfS4gvyToNNBfHDFI-5" vertex="1">
