@@ -2,35 +2,35 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from data.database import get_db
 from models.pokemon import Pokemon
-import utils.sql_queries as fns
-import utils.select_queries as select_fns
-import utils.insert_queries as insert_fns
+import utils.sql_queries as check_functions
+import utils.get_queries as select_functions
+import utils.insert_queries as insert_functions
 
 router = APIRouter()
 
 @router.post('/pokemon')
 def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
-    if not fns.is_pokemon_in_table(db, pokemon.name):
-        insert_fns.insert_into_pokemons_table(db,name=pokemon.name, height=pokemon.height, weight=pokemon.weight)
+    if not check_functions.is_pokemon_in_table(db, pokemon.name):
+        insert_functions.insert_into_pokemons_table(db,name=pokemon.name, height=pokemon.height, weight=pokemon.weight)
     else:
-        raise HTTPException(403, detail="Pokemon already exists")
-    if not fns.is_type_in_table(db, pokemon.type):
-        insert_fns.insert_into_types_table(db, [pokemon.type])
+        raise HTTPException(409, detail="Pokemon already exists")
+    if not check_functions.is_type_in_table(db, pokemon.type):
+        insert_functions.insert_into_types_table(db, [pokemon.type])
 
-    pokemon_obj = select_fns.select_pokemon(db, pokemon.name)
+    pokemon_obj = select_functions.select_pokemon(db, pokemon.name)
     pokemon_id = pokemon_obj.pokemon_id
 
-    type_obj = select_fns.select_type(db, pokemon.type)
+    type_obj = select_functions.select_type(db, pokemon.type)
     type_id = type_obj.types_id
 
-    if not fns.is_in_pokemontype(db, pokemon_id, type_id):
-        insert_fns.insert_into_PokemonTypes_table(db, pokemon_id, type_id)
+    if not check_functions.is_in_pokemontype(db, pokemon_id, type_id):
+        insert_functions.insert_into_PokemonTypes_table(db, pokemon_id, type_id)
         return {f"Status code: {status.HTTP_201_CREATED}","pokemon was added to the database"}
 
-@router.get('/by-type/{type}')
+@router.get('/pokemons/type')
 def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
-    return select_fns.select_pokemons_by_type(db, type)
+    return select_functions.select_pokemons_by_type(db, type)
 
-@router.get('/by-traienr/{trainer_name}')
+@router.get('/pokemons/trainer')
 def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
-    return select_fns.slecte_pokemons_by_trainer(db, trainer_name)
+    return select_functions.slecte_pokemons_by_trainer(db, trainer_name)
