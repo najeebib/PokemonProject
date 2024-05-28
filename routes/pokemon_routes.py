@@ -29,8 +29,8 @@ def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
 
 @router.get('/by-type/{type}')
 def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
-    return {f"Status code: {status.HTTP_201_CREATED}",select_fns.select_pokemons_by_type(db, type)}
+    return select_fns.select_pokemons_by_type(db, type)
 
 @router.get('/by-traienr/{trainer_name}')
 def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
-    return {f"Status code: {status.HTTP_201_CREATED}", select_fns.slecte_pokemons_by_trainer(db, trainer_name)}
+    return select_fns.slecte_pokemons_by_trainer(db, trainer_name)
