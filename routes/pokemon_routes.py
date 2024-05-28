@@ -14,7 +14,7 @@ def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
         insert_fns.insert_into_pokemons_table(db,name=pokemon.name, height=pokemon.height, weight=pokemon.weight)
     else:
         raise HTTPException(403, detail="Pokemon already exists")
-    if not fns.is_type_in_table(db, type=pokemon.type):
+    if not fns.is_type_in_table(db, pokemon.type):
         insert_fns.insert_into_types_table(db, [pokemon.type])
 
     pokemon_obj = select_fns.select_pokemon(db, pokemon.name)
