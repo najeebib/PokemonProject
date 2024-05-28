@@ -1,5 +1,5 @@
 import json
-from .sql_queries import insert_into_pokemons_table, insert_into_types_table, insert_into_trainers_table, insert_into_Pokedex_table, insert_into_PokemonTypes_table
+from .insert_queries import insert_into_pokemons_table, insert_into_types_table, insert_into_trainers_table, insert_into_Pokedex_table, insert_into_PokemonTypes_table
 from data.database import get_db
 import requests
 from data.models import  Types,  Trainer 
