@@ -1,6 +1,6 @@
 import utils.sql_queries as fns
 from data.database import get_db
-import utils.select_queries as select_fns
+import utils.get_queries as select_fns
 import utils.delete_queries as delete_fns
 import utils.insert_queries as insert_fns
 
