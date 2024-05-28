@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.get('/trainers/pokemon/{pokemon_name}')
 def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
-    return {f"Status code: {status.HTTP_201_CREATED}", select_fns.select_trainers_by_pokemonName(db, pokemon_name)}
+    return select_fns.select_trainers_by_pokemonName(db, pokemon_name)
 
 @router.post('/trainer')
 def add_pokemon(trainer: Trainer, db: Session = Depends(get_db)):
