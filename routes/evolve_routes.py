@@ -27,4 +27,4 @@ def evolve(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
         else:
             raise HTTPException(403, detail="No evoilution possible")
     else:
-        raise HTTPException(404, detail="Pokemon not found")
+        raise HTTPException(404, detail="Pokemon/Trainer not found")
