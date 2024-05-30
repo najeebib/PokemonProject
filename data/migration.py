@@ -6,6 +6,9 @@ from data.models import  Types,  Trainer
 import utils.get_queries as get_fns
 
 def load_db():
+    """
+    Migrate the data from json file to MySQL db
+    """
     try:
         with open("./data/pokemons_data.json", "r") as f:
             content = f.read()
