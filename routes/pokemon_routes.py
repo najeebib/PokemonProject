@@ -10,6 +10,12 @@ router = APIRouter()
 
 @router.post('/pokemon')
 def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
+    """
+    Post new pokemon to the database
+
+    Parameters:
+    - pokemon: the pokemon object.
+    """
     if not check_functions.is_pokemon_in_table(db, pokemon.name):
         insert_functions.insert_into_pokemons_table(db,name=pokemon.name, height=pokemon.height, weight=pokemon.weight)
     else:
@@ -29,8 +35,20 @@ def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
 
 @router.get('/pokemons/type')
 def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
+    """
+    get pokemons to of the given type
+
+    Parameters:
+    - type: the type of the pokemon.
+    """
     return select_functions.select_pokemons_by_type(db, type)
 
 @router.get('/pokemons/trainer')
 def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
+    """
+    get pokemons to of the given trainer
+
+    Parameters:
+    - trainer: the trainer of the pokemon.
+    """
     return select_functions.slecte_pokemons_by_trainer(db, trainer_name)

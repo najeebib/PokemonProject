@@ -11,10 +11,22 @@ router = APIRouter()
 
 @router.get('/trainers/{pokemon_name}')
 def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
+    """
+    get trainers to of the given pokemon
+
+    Parameters:
+    - pokemon_name: the pokemon name.
+    """
     return select_functions.select_trainers_by_pokemonName(db, pokemon_name)
 
 @router.post('/trainer')
 def add_trainer(trainer: Trainer, db: Session = Depends(get_db)):
+    """
+    Insert new trainer to the database
+
+    Parameters:
+    - trainer: the trainer object.
+    """
     if not check_functions.is_trainer_in_table(db, trainer.name):
         insert_functions.insert_into_trainers_table(db, trainer.name, trainer.town)
         return {f"Status code: {status.HTTP_201_CREATED}","trainer was added to the database"}
@@ -23,6 +35,13 @@ def add_trainer(trainer: Trainer, db: Session = Depends(get_db)):
 
 @router.post('/trainer/{trainer_name}/pokemon')
 def add_pokemon_to_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
+    """
+    Insert new trainer pokemon to the trainer
+
+    Parameters:
+    - trainer_name: trainer name.
+    - pokemon_name: pokemon name.
+    """
     pokemon = select_functions.select_pokemon(db, pokemon_name)
     trainer = select_functions.select_trainer(db, trainer_name)
 
@@ -36,6 +55,13 @@ def add_pokemon_to_trainer(trainer_name: str, pokemon_name: str, db: Session = D
 
 @router.delete('/trainer/{trainer_name}/pokemon')
 def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
+    """
+    delete  pokemon from the trainer
+
+    Parameters:
+    - trainer_name: trainer name.
+    - pokemon_name: pokemon name.
+    """
     pokemon = select_functions.select_pokemon(db, pokemon_name)
     trainer = select_functions.select_trainer(db, trainer_name)
 
