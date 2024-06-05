@@ -1,5 +1,4 @@
 import json
-import utils.insert_queries as insert_fns
 from data.database import mongo_api
 import requests
 
