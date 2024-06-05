@@ -1,22 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from data.database import get_db
-import utils.sql_queries as check_functions
-import utils.get_queries as select_check_functions
-import utils.delete_queries as delete_functions
-import api.evolution_fns as evolve_functions
-import utils.insert_queries as insert_functions
-
 router = APIRouter()
 
 @router.put('/evolution')
-def evolve(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
+def evolve(trainer_name: str, pokemon_name: str):
     """
     Evolve the given pokemon of the given trainer.
 
     Parameters:
     - pokemon_name: name of the pokemon.
     - trainer_name: name of the trainer.
+    """
+    # check if pokemon and trainer exist, return 404 if either doesn't
+    # check if there is a possible evolution, if not return 403
+    # get trainer id
+    # check if trainer has the next evolution, if he has return 409
+    # check if next evolution is in pokemons table, if not add it
+    # remove trainer id from pokemon by name and add trainer id to next evolution by name
     """
     #Check if pokemon and trainer exist
     if not check_functions.is_pokemon_in_table(db, pokemon_name) and not check_functions.is_trainer_in_table(db, trainer_name):
@@ -37,3 +36,4 @@ def evolve(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
         return {f"Status code: {status.HTTP_200_OK}","Evolution was successfull"}
     else:
         raise HTTPException(409, detail="Cant evolve this pokemon")
+    """

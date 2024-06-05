@@ -45,3 +45,7 @@ def get_next_evolution(chain, pokemon_name):
         if next_evolution:
             return next_evolution
     return None
+
+def get_pokemon_details(pokemon_name: str):
+    # get pokemon name, types, weight and height from api
+    pass

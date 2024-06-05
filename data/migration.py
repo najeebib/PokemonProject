@@ -1,9 +1,7 @@
 import json
 import utils.insert_queries as insert_fns
-from data.database import get_db
+from data.database import mongo_api
 import requests
-from data.models import  Types,  Trainer 
-import utils.get_queries as get_fns
 
 def load_db():
     """
@@ -34,25 +32,8 @@ def load_db():
                 for type in poke_types:
                     if type not in types:
                         types.append(type["type"]["name"])
-
                 
-                db_generator = get_db()
-                db = next(db_generator)
 
-                insert_fns.insert_into_pokemons_table(db, pokemon_name, pokemon_height, pokemon_weight)
-                insert_fns.insert_into_types_table(db, types)
-
-                for pokemon_type in types:
-                    type_obj = get_fns.select_type(db, pokemon_type)
-                    insert_fns.insert_into_PokemonTypes_table(db, pokemon_id, type_obj.types_id)
-
-                owners = pokemon["ownedBy"]
-                for trainer in owners:
-                    trainer_name = trainer["name"]
-                    trainer_town = trainer["town"]
-                    insert_fns.insert_into_trainers_table(db, trainer_name, trainer_town)
-                    trainer_obj = get_fns.select_trainer(db, trainer_name)
-                    insert_fns.nsert_into_Pokedex_table(db, pokemon_id, trainer_obj.trainer_id)
     except FileNotFoundError:
         print(f"File not found.")
         return

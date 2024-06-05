@@ -1,18 +1,13 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from pymongo import MongoClient
+class MongoAPI:
+    def __init__(self) -> None:
+        self.client = MongoClient("mongodb://localhost:27017/")
 
-URL_DATABASE = 'mysql+pymysql://root:@localhost:3306/PokemonDB'
-
-engine = create_engine(URL_DATABASE)
-
-session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-base = declarative_base()
-
-def get_db():
-    db = session_local()
-    try:
-        yield db
-    finally:
-        db.close()
+        database = "pokemon-service"
+        pokemon_collection_name = "pokemons"
+        trainers_collection_name = "trainers"
+        cursor = self.client[database]
+        self.pokemon_collection = cursor[pokemon_collection_name]
+        self.trainers_collection = cursor[trainers_collection_name]
+    
+mongo_api = MongoAPI()
