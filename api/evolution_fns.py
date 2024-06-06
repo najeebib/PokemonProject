@@ -48,4 +48,13 @@ def get_next_evolution(chain, pokemon_name):
 
 def get_pokemon_details(pokemon_name: str):
     # get pokemon name, types, weight and height from api
-    pass
+    URL = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}"
+    pokemon_response = requests.get(URL).json()
+
+    pokemon_info = {
+        "name": pokemon_response["name"],
+        "types": [type_data["type"]["name"] for type_data in pokemon_response["types"]],
+        "weight": pokemon_response["weight"],
+        "height": pokemon_response["height"],
+    }
+    return pokemon_info
