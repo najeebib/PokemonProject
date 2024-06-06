@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from routes import pokemon_routes
 from routes import evolve_routes
 from routes import trainer_routes
@@ -9,6 +9,7 @@ app  = FastAPI()
 @app.get("/migration")
 def migration():
     load_db()
+    return {status.HTTP_200_OK: "Data migration complete"}
 
 app.include_router(pokemon_routes.router)
 app.include_router(trainer_routes.router)
