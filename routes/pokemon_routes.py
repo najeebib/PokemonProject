@@ -39,6 +39,6 @@ def get_pokemon_by_trainer(trainer_name: str):
     Parameters:
     - trainer: the trainer of the pokemon.
     """
-    trainer = get_functions.get_trainer(trainer_name)
+    trainer = get_functions.get_trainer_by_name(trainer_name)
     trainer_id = trainer['_id']
     return get_functions.get_pokemons_by_trainer(trainer_id)

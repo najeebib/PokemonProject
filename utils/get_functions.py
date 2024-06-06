@@ -7,8 +7,15 @@ def get_pokemon(pokemon_name: str):
             document['_id'] = str(document['_id'])
     return document
 
-def get_trainer(trainer_name: str):
+def get_trainer_by_name(trainer_name: str):
     document = mongo_api.trainers_collection.find_one({"name": trainer_name})
+    if document and '_id' in document:
+            document['_id'] = str(document['_id'])
+    return document
+
+def get_trainer_by_id(trainer_id: str):
+    trainer_oid = ObjectId(trainer_id)
+    document = mongo_api.trainers_collection.find_one({"_id": trainer_oid})
     if document and '_id' in document:
             document['_id'] = str(document['_id'])
     return document
