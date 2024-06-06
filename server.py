@@ -2,12 +2,9 @@ from fastapi import FastAPI, Request
 from routes import pokemon_routes
 from routes import evolve_routes
 from routes import trainer_routes
-import data.models as models
-from data.database import engine
 from data.migration import load_db
 
 app  = FastAPI()
-models.base.metadata.create_all(bind=engine)
 
 @app.get("/migration")
 def migration():

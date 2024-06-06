@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 class Pokemon(BaseModel):
     name: str
-    type: str
+    types: list
     height: int
     weight: int
 
