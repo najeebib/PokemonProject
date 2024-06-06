@@ -14,7 +14,6 @@ def get_trainers(pokemon_name: str):
     - pokemon_name: the pokemon name.
     """
     pokemon = get_functions.get_pokemon(pokemon_name)
-    print(type(pokemon))
     if not pokemon:
         raise HTTPException(status_code=404, detail="Pokemon not found")
     pokemon_trainers = pokemon['trainers']
