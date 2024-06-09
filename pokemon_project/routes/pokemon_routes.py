@@ -4,6 +4,10 @@ from models.pokemon import Pokemon
 
 router = APIRouter()
 
+@router.get('/pokemon')
+def get_pokemon(pokemon_name: str):
+    response = requests.get(f"http://localhost:5000/pokemon?pokemon_name={pokemon_name}")
+    return response.json()
 @router.post('/pokemon')
 def add_pokemon(pokemon: Pokemon):
     response = requests.post("http://localhost:5000/pokemon", json=pokemon.model_dump())
