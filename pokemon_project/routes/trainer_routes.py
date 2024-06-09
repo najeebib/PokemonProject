@@ -1,28 +1,23 @@
-import requests
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter
 from models.trainer import Trainer
-
+from classes.requests_handler import requests_handler
 
 
 router = APIRouter()
 
 @router.post('/trainer')
 def add_trainer(trainer: Trainer):
-    response = requests.post("http://localhost:5000/trainer", json=trainer.model_dump())
-    return response.json()
+    return requests_handler.add_trainer(trainer)
 
 @router.get('/trainers/{pokemon_name}')
 def get_trainers(pokemon_name: str):
-    response = requests.get(f"http://localhost:5000/trainers/{pokemon_name}")
-    return response.json()
+    return requests_handler.get_trainers(pokemon_name)
 
 @router.post('/trainer/{trainer_name}/pokemon')
-def add_trainer(trainer_name: str, pokemon_name: str):
-    response = requests.post(f"http://localhost:5000/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
-    return response.json()
+def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):
+    return requests_handler.add_pokemon_to_trainer(trainer_name, pokemon_name)
 
 
 @router.delete('/trainer/{trainer_name}/pokemon')
 def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str):
-    response = requests.delete(f"http://localhost:5000/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
-    return response.json()
+    return requests_handler.delete_pokemon_from_trainer(trainer_name, pokemon_name)
