@@ -8,6 +8,10 @@ import utils.insert_queries as insert_functions
 
 router = APIRouter()
 
+@router.get('/pokemon')
+def get_pokemon(pokemon_name: str, db: Session = Depends(get_db)):
+    return select_functions.select_pokemon(db, pokemon_name)
+
 @router.post('/pokemon')
 def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
     """
