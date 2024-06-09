@@ -52,7 +52,7 @@ def load_db():
                     trainer_town = trainer["town"]
                     insert_fns.insert_into_trainers_table(db, trainer_name, trainer_town)
                     trainer_obj = get_fns.select_trainer(db, trainer_name)
-                    insert_fns.nsert_into_Pokedex_table(db, pokemon_id, trainer_obj.trainer_id)
+                    insert_fns.insert_into_Pokedex_table(db, pokemon_id, trainer_obj.trainer_id)
     except FileNotFoundError:
         print(f"File not found.")
         return
