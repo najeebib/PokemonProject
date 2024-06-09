@@ -1,8 +1,6 @@
 import json
 import utils.insert_queries as insert_fns
 from data.database import get_db
-import requests
-from data.models import  Types,  Trainer 
 import utils.get_queries as get_fns
 
 def load_db():
@@ -28,14 +26,6 @@ def load_db():
                 else:
                     types.append(pokemon_type)
 
-                poke_api = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
-                response = poke_api.json()
-                poke_types = response["types"]
-                for type in poke_types:
-                    if type not in types:
-                        types.append(type["type"]["name"])
-
-                
                 db_generator = get_db()
                 db = next(db_generator)
 

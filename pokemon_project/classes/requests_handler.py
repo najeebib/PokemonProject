@@ -38,8 +38,8 @@ class RequestsHandler:
         response = requests.delete(f"http://pokemon_api-mypokemonserver-1:5000/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
         return response.json()
     
-    def evolution(trainer_name: str, pokemon_name: str):
-        response = requests.put(f"http://pokemon_api-mypokemonserver-1:5000/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}")
+    def evolution(trainer_name: str, pokemon_name: str, next_evolution: str):
+        response = requests.put(f"http://pokemon_api-mypokemonserver-1:5000/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
         return response.json()
 
 
