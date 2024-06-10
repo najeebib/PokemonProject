@@ -12,7 +12,7 @@ def select_trainer(db: Session, trainer_name: str):
   
 def select_pokemon(db: Session, pokemon_name: str):
     result = db.execute(text(f"SELECT * FROM `pokemons` WHERE name = '{pokemon_name}'")).fetchone()
-    return result
+    return result._mapping
 
 
 def select_pokemons_by_type(db: Session, pokemon_type: str):
