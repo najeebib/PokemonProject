@@ -30,35 +30,35 @@ class RequestsHandler:
         pokemon = {"name": pokemon.name, "content": encoded_image}
 
         added_response = requests.post("http://localhost:5002/image", json=pokemon)
-        return added_response.json()
+        return added_response
     
     def get_pokemons_by_type(self, type):
         response = requests.get(f"http://localhost:5000/pokemons/type?type={type}")
-        return response.json()
+        return response
     
     def get_pokemons_by_trainer(self, trainer_name):
         response = requests.get(f"http://localhost:5000/pokemons/trainer?trainer_name={trainer_name}")
-        return response.json()
+        return response
     
     def add_trainer(self, trainer: Trainer):
         response = requests.post("http://localhost:5000/trainer", json=trainer.model_dump())
-        return response.json()
+        return response
     
     def get_trainers(self, pokemon_name):
         response = requests.get(f"http://localhost:5000/trainers/{pokemon_name}")
-        return response.json()
+        return response
     
     def add_pokemon_to_trainer(self, trainer_name: str, pokemon_name: str):
         response = requests.post(f"http://localhost:5000/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
-        return response.json()
+        return response
     
     def delete_pokemon_from_trainer(self,trainer_name: str, pokemon_name: str):
         response = requests.delete(f"http://localhost:5000/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
-        return response.json()
+        return response
     
     def evolution(self,trainer_name: str, pokemon_name: str, next_evolution: str):
         response = requests.put(f"http://localhost:5000/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
-        return response.json()
+        return response
     
     def data_migration(self):
         response = requests.get("http://localhost:5000/migration")
@@ -77,7 +77,7 @@ class RequestsHandler:
 
         pokemons = {"pokemons": pokemons_list}
         mongo_server_response = requests.post("http://localhost:5002/images", json=pokemons)
-        return mongo_server_response.json()
+        return mongo_server_response
 
 
 requests_handler = RequestsHandler()
