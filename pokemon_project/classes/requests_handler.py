@@ -41,6 +41,10 @@ class RequestsHandler:
     def evolution(trainer_name: str, pokemon_name: str, next_evolution: str):
         response = requests.put(f"http://pokemon_api-mypokemonserver-1:5000/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
         return response.json()
+    
+    def data_migration():
+        response = requests.get("http://pokemon_api-mypokemonserver-1:5000/migration")
+        pokemons_names = response.json()
 
 
 requests_handler = RequestsHandler()

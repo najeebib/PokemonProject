@@ -11,6 +11,7 @@ def load_db():
         with open("./data/pokemons_data.json", "r") as f:
             content = f.read()
             content = json.loads(content)
+            pokemons_list = []
             for pokemon in content:
                 pokemon_id = pokemon["id"]
                 pokemon_name = pokemon["name"]
@@ -18,6 +19,7 @@ def load_db():
                 pokemon_height = pokemon["height"]
                 pokemon_type = pokemon["type"]
 
+                pokemons_list.append(pokemon_name)
                 
                 types = []
                 if isinstance(pokemon_type, list):
@@ -43,6 +45,7 @@ def load_db():
                     insert_fns.insert_into_trainers_table(db, trainer_name, trainer_town)
                     trainer_obj = get_fns.select_trainer(db, trainer_name)
                     insert_fns.insert_into_Pokedex_table(db, pokemon_id, trainer_obj.trainer_id)
+            return pokemons_list
     except FileNotFoundError:
         print(f"File not found.")
         return
