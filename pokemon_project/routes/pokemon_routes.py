@@ -9,7 +9,10 @@ def get_pokemon(pokemon_name: str):
 
 @router.post('/pokemon')
 def add_pokemon(pokemon: Pokemon):
-    return requests_handler.add_pokemon(pokemon)
+    status = requests_handler.add_pokemon(pokemon)
+    if status == 201:
+        return {f"Status code: {status}","pokemon was added to the database"}
+    return status
     
 
 @router.get('/pokemons/type')
