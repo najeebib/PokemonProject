@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import gridfs
 class MongoAPI:
     def __init__(self) -> None:
-        self.client = MongoClient("mongodb://localhost:27017/")
+        self.client = MongoClient("mongodb://mymongo_1:27017/")
 
         database = "pokemon-service"
         pokemon_collection_name = "pokemon-images"

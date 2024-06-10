@@ -14,29 +14,20 @@ def get_pokemon(pokemon_name: str):
 
 @router.post('/pokemon')
 def add_pokemon(pokemon: Pokemon):
-    try:
-        status = requests_handler.add_pokemon(pokemon)
-        if status == 201:
-            return {f"Status code: {status}","pokemon was added to the database"}
-        return status
-    except Exception:
-        raise HTTPException(500, detail="Server error")
+    status = requests_handler.add_pokemon(pokemon)
+    if status == 201:
+        return {f"Status code: {status}","pokemon was added to the database"}
+    return status
     
 
 @router.get('/pokemons/type')
-def get_pokemon_by_type(type: str):
-    try:
-        if type(type) == str:
-            return requests_handler.get_pokemons_by_type(type)
-        raise HTTPException(400, detail="Ivalid pokemon type")
-    except Exception:
-        raise HTTPException(500, detail="Server error")
+def get_pokemon_by_type(pokemon_type: str):
+    if type(pokemon_type) == str:
+        return requests_handler.get_pokemons_by_type(pokemon_type)
+    raise HTTPException(400, detail="Ivalid pokemon type")
 
 @router.get('/pokemons/trainer')
 def get_pokemon_by_trainer(trainer_name: str):
-    try:
-        if type(trainer_name) == str:
-            return requests_handler.get_pokemons_by_trainer(trainer_name)
-        raise HTTPException(400, detail="Ivalid trainer name")
-    except Exception:
-        raise HTTPException(500, detail="Server error")
+    if type(trainer_name) == str:
+        return requests_handler.get_pokemons_by_trainer(trainer_name)
+    raise HTTPException(400, detail="Ivalid trainer name")
