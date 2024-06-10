@@ -2,12 +2,16 @@ from fastapi import FastAPI, Request
 from routes import pokemon_routes
 from routes import evolve_routes
 from routes import trainer_routes
+from routes import data_migration_routes
+
 app  = FastAPI()
 
 
 app.include_router(pokemon_routes.router)
 app.include_router(trainer_routes.router)
 app.include_router(evolve_routes.router)
+app.include_router(data_migration_routes.router)
+
 
 @app.middleware("http")
 async def log_req(request:Request, call_next):

@@ -1,8 +1,6 @@
 import json
 import utils.insert_queries as insert_fns
 from data.database import get_db
-import requests
-from data.models import  Types,  Trainer 
 import utils.get_queries as get_fns
 
 def load_db():
@@ -13,6 +11,7 @@ def load_db():
         with open("./data/pokemons_data.json", "r") as f:
             content = f.read()
             content = json.loads(content)
+            pokemons_list = []
             for pokemon in content:
                 pokemon_id = pokemon["id"]
                 pokemon_name = pokemon["name"]
@@ -20,6 +19,7 @@ def load_db():
                 pokemon_height = pokemon["height"]
                 pokemon_type = pokemon["type"]
 
+                pokemons_list.append(pokemon_name)
                 
                 types = []
                 if isinstance(pokemon_type, list):
@@ -28,14 +28,6 @@ def load_db():
                 else:
                     types.append(pokemon_type)
 
-                poke_api = requests.get(f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}")
-                response = poke_api.json()
-                poke_types = response["types"]
-                for type in poke_types:
-                    if type not in types:
-                        types.append(type["type"]["name"])
-
-                
                 db_generator = get_db()
                 db = next(db_generator)
 
@@ -53,6 +45,7 @@ def load_db():
                     insert_fns.insert_into_trainers_table(db, trainer_name, trainer_town)
                     trainer_obj = get_fns.select_trainer(db, trainer_name)
                     insert_fns.insert_into_Pokedex_table(db, pokemon_id, trainer_obj.trainer_id)
+            return pokemons_list
     except FileNotFoundError:
         print(f"File not found.")
         return
