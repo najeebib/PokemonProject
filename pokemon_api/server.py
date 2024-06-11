@@ -11,7 +11,7 @@ models.base.metadata.create_all(bind=engine)
 
 @app.get("/migration")
 def migration():
-    load_db()
+    return load_db()
 
 app.include_router(pokemon_routes.router)
 app.include_router(trainer_routes.router)

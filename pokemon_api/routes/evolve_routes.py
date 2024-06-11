@@ -4,13 +4,12 @@ from data.database import get_db
 import utils.sql_queries as check_functions
 import utils.get_queries as select_check_functions
 import utils.delete_queries as delete_functions
-import api.evolution_fns as evolve_functions
 import utils.insert_queries as insert_functions
 
 router = APIRouter()
 
 @router.put('/evolution')
-def evolve(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
+def evolve(trainer_name: str, pokemon_name: str, next_evolution: str, db: Session = Depends(get_db)):
     """
     Evolve the given pokemon of the given trainer.
 
@@ -21,9 +20,7 @@ def evolve(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
     #Check if pokemon and trainer exist
     if not check_functions.is_pokemon_in_table(db, pokemon_name) and not check_functions.is_trainer_in_table(db, trainer_name):
         raise HTTPException(404, detail="Pokemon/Trainer not found")
-    #Get evolution chain
-    chain = evolve_functions.get_evolution_chain(pokemon_name)
-    next_evolution = evolve_functions.get_next_evolution(chain, pokemon_name)
+    
     #Check if evolution is possible
     if not next_evolution:
         raise HTTPException(403, detail="No evoilution possible")

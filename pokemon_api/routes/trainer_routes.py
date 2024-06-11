@@ -9,7 +9,7 @@ import utils.insert_queries as insert_functions
 
 router = APIRouter()
 
-@router.get('/trainers/{pokemon_name}')
+@router.get('/trainer/{pokemon_name}')
 def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
     """
     get trainers to of the given pokemon
