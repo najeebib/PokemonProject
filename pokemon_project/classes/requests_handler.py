@@ -8,7 +8,7 @@ class RequestsHandler:
         pass
 
     def get_pokemon(self, pokemon_name):
-        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon?pokemon_name={pokemon_name}")
+        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5003/pokemon?pokemon_name={pokemon_name}")
         pokemon_properties = response.json()
         response_image  = requests.get(f"http://mongodb_gridfs_server-myreader-1:5002/image/{pokemon_name}")
         image_data = response_image.content
@@ -20,7 +20,7 @@ class RequestsHandler:
         return response_data
     
     def add_pokemon(self, pokemon: Pokemon):
-        response = requests.post("http://pokemon_api-mypokemonserver-1:5000/pokemon", json=pokemon.model_dump())
+        response = requests.post("http://pokemon_api-mypokemonserver-1:5003/pokemon", json=pokemon.model_dump())
 
         res = requests.get("https://pokeapi.co/api/v2/pokemon/" + pokemon.name).json()
         image_url = res["sprites"]["front_default"]
@@ -33,35 +33,35 @@ class RequestsHandler:
         return added_response.json()
     
     def get_pokemons_by_type(self, type):
-        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemons/type?type={type}")
+        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5003/pokemons/type?type={type}")
         return response.json()
     
     def get_pokemons_by_trainer(self, trainer_name):
-        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemons/trainer?trainer_name={trainer_name}")
+        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5003/pokemons/trainer?trainer_name={trainer_name}")
         return response.json()
     
     def add_trainer(self, trainer: Trainer):
-        response = requests.post("http://pokemon_api-mypokemonserver-1:5000/trainer", json=trainer.model_dump())
+        response = requests.post("http://pokemon_api-mypokemonserver-1:5003/trainer", json=trainer.model_dump())
         return response.json()
     
     def get_trainers(self, pokemon_name):
-        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/trainers/{pokemon_name}")
+        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5003/trainers/{pokemon_name}")
         return response.json()
     
     def add_pokemon_to_trainer(self, trainer_name: str, pokemon_name: str):
-        response = requests.post(f"http://pokemon_api-mypokemonserver-1:5000/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
+        response = requests.post(f"http://pokemon_api-mypokemonserver-1:5003/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
         return response.json()
     
     def delete_pokemon_from_trainer(self,trainer_name: str, pokemon_name: str):
-        response = requests.delete(f"http://pokemon_api-mypokemonserver-1:5000/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
+        response = requests.delete(f"http://pokemon_api-mypokemonserver-1:5003/trainer/{trainer_name}/pokemon?pokemon_name={pokemon_name}")
         return response.json()
     
     def evolution(self,trainer_name: str, pokemon_name: str, next_evolution: str):
-        response = requests.put(f"http://pokemon_api-mypokemonserver-1:5000/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
+        response = requests.put(f"http://pokemon_api-mypokemonserver-1:5003/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
         return response.json()
     
     def data_migration(self):
-        response = requests.get("http://pokemon_api-mypokemonserver-1:5000/migration")
+        response = requests.get("http://pokemon_api-mypokemonserver-1:5003/migration")
         pokemons_names = response.json()
 
         pokemons_list = []
