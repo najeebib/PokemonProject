@@ -33,7 +33,7 @@ def add_trainer(trainer: Trainer, db: Session = Depends(get_db)):
     else:
         raise HTTPException(409, detail="Trainer already exists")
 
-@router.post('/trainer/{trainer_name}/pokemon')
+@router.post('/trainer/pokemon')
 def add_pokemon_to_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
     """
     Insert new trainer pokemon to the trainer
@@ -53,7 +53,7 @@ def add_pokemon_to_trainer(trainer_name: str, pokemon_name: str, db: Session = D
         else:
              raise HTTPException(403, detail="Trainer already has this pokemon")
 
-@router.delete('/trainer/{trainer_name}/pokemon')
+@router.delete('/trainer/pokemon')
 def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
     """
     delete  pokemon from the trainer

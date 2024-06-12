@@ -10,6 +10,12 @@ router = APIRouter()
 
 @router.get('/pokemon')
 def get_pokemon(pokemon_name: str, db: Session = Depends(get_db)):
+    """
+    Get pokemon from the database
+
+    Parameters:
+    - pokemon_name: the pokemon name.
+    """
     return select_functions.select_pokemon(db, pokemon_name)
 
 @router.post('/pokemon')

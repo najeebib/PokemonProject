@@ -3,6 +3,8 @@ from routes import pokemon_routes
 from routes import evolve_routes
 from routes import trainer_routes
 from routes import data_migration_routes
+from routes import images_routes
+
 
 app  = FastAPI()
 
@@ -11,6 +13,7 @@ app.include_router(pokemon_routes.router)
 app.include_router(trainer_routes.router)
 app.include_router(evolve_routes.router)
 app.include_router(data_migration_routes.router)
+app.include_router(images_routes.router)
 
 
 @app.middleware("http")
