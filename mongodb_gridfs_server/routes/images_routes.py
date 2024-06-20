@@ -5,15 +5,15 @@ import base64
 import utils.gridfs_functions as gridfs_functions
 router = APIRouter()
 
-
-@router.get('/image/{pokemon_name}')
+# get the image of the pokemon
+@router.get('/image')
 def get_pokemon_image(pokemon_name: str):
     try:
         out_data = gridfs_functions.get_pokemon_image(pokemon_name)
         return Response(content=out_data, media_type="image/jpeg")
     except Exception:
         raise HTTPException(500, detail="Server error when getting pokemon image")
-
+# insert the image of the pokemon
 @router.post('/image')
 def insert_pokemons_image(pokemon: Pokemon):
     try:
@@ -24,7 +24,7 @@ def insert_pokemons_image(pokemon: Pokemon):
         return {f"Status code: {status.HTTP_201_CREATED}","pokemon image was added to the database"}
     except Exception:
         raise HTTPException(500, detail="Server error when isnerting pokemon image")
-
+# insert the images of all the pokemons in the sql db to mongo db
 @router.post('/images')
 def insert_pokemons_images(pokemons: PokemonsList):
     try:
