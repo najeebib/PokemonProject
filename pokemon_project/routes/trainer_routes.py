@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from models.trainer import Trainer
 from classes.requests_handler import requests_handler
-
+from redis.redis import rd
+import json
 
 router = APIRouter()
 
@@ -25,9 +26,16 @@ def get_trainers(pokemon_name: str):
     Parameters:
     - trainer: the trainer object.
     """
-    if type(pokemon_name) == str:
-        return requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/trainers", pokemon_name=pokemon_name)
-    raise HTTPException(400, detail="Ivalid pokemon name")
+    if type(pokemon_name) != str:
+        raise HTTPException(400, detail="Ivalid pokemon name")
+    url_key = f"/trainers?pokemon_name={pokemon_name}"
+    cache = rd.get(url_key)
+    if cache:
+        return json.loads(cache)
+    else:
+        response = requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/trainers", pokemon_name=pokemon_name)
+        rd.set(url_key, response)
+        return response
 
 @router.post('/trainer/pokemon')
 def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):

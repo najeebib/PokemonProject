@@ -10,7 +10,7 @@ class RequestsHandler:
     def get_pokemon(self, pokemon_name):
         response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon?pokemon_name={pokemon_name}")
         pokemon_properties = response.json()
-        response_image  = requests.get(f"http://mongodb_gridfs_server-myreader-1:5002/image/{pokemon_name}")
+        response_image  = requests.get(f"http://mongodb_gridfs_server-myreader-1:5002/image?pokemon_name={pokemon_name}")
         image_data = response_image.content
         encoded_image = base64.b64encode(image_data).decode('utf-8')
         response_data = {

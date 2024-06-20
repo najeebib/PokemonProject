@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from models.pokemon import Pokemon
 from classes.requests_handler import requests_handler
+from redis.redis import rd
+import json
 router = APIRouter()
 
 @router.get('/pokemon')
@@ -12,9 +14,16 @@ def get_pokemon(pokemon_name: str):
     - pokemon_name: the pokemon name.
     """
     try:
-        if type(pokemon_name) == str:
-            return requests_handler.get_pokemon(pokemon_name)
-        raise HTTPException(400, detail="Ivalid pokemon name")
+        if type(pokemon_name) != str:
+            raise HTTPException(400, detail="Ivalid pokemon name")
+        url_key = f"/pokemon?pokemon_name={pokemon_name}"
+        cache = rd.get(url_key)
+        if cache:
+            return json.loads(cache)
+        else:
+            response = requests_handler.get_pokemon(pokemon_name)
+            rd.set(url_key, response)
+            return response
     except Exception:
         raise HTTPException(500, detail="Server error")
 
@@ -40,9 +49,16 @@ def get_pokemon_by_type(pokemon_type: str):
     Parameters:
     - pokemon_type: the pokemon type.
     """
-    if type(pokemon_type) == str:
-        return requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/type", type=pokemon_type)
-    raise HTTPException(400, detail="Ivalid pokemon type")
+    if type(pokemon_type) != str:
+        raise HTTPException(400, detail="Ivalid pokemon type")
+    url_key = f"/pokemons/type?pokemon_type={pokemon_type}"
+    cache = rd.get(url_key)
+    if cache:
+        return json.loads(cache)
+    else:
+        response =  requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/type", type=pokemon_type)
+        rd.set(url_key, response)
+        return response
 
 @router.get('/pokemons/trainer')
 def get_pokemon_by_trainer(trainer_name: str):
@@ -52,6 +68,13 @@ def get_pokemon_by_trainer(trainer_name: str):
     Parameters:
     - trainer_name: the trainer name.
     """
-    if type(trainer_name) == str:
-        return requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/trainer", trainer_name=trainer_name)
-    raise HTTPException(400, detail="Ivalid trainer name")
+    if type(trainer_name) != str:
+        raise HTTPException(400, detail="Ivalid trainer name")
+    url_key = f"/pokemons/trainer?trainer_name={trainer_name}"
+    cache = rd.get(url_key)
+    if cache:
+        return json.loads(cache)
+    else:
+        response = requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/trainer", trainer_name=trainer_name)
+        rd.set(url_key, response)
+        return response

@@ -2,7 +2,7 @@ from data.database import mongo_api
 import requests
 
 def get_pokemon_image(pokemon_name: str):
-    # ge tthe image from mongo db
+    # get the image from mongo db
     data = mongo_api.pokemon_images_collection.find_one({"filename": pokemon_name})
 
     fs_id = data['_id']
