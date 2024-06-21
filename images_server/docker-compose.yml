@@ -4,11 +4,18 @@ services:
         image: "mongo"
         ports:
             - "27017:27017"
+        networks:
+            - pokemon-service
     
-    myreader:
+    images-server:
         build: .
         depends_on: 
             - mymongo_1
         ports:
             - "5002:5002"
+        networks:
+            - pokemon-service
 
+networks:
+    pokemon-service:
+        external: true

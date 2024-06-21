@@ -8,10 +8,18 @@ services:
         environment:
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
             MYSQL_DATABASE: PokemonDB
+        networks:
+            - pokemon-service
     
-    mypokemonserver:
+    pokemon-api:
         build: .
         depends_on: 
             - mysql_1
         ports:
-            - "5000:5000"
+            - "5001:5001"
+        networks:
+            - pokemon-service
+
+networks:
+    pokemon-service:
+        external: true

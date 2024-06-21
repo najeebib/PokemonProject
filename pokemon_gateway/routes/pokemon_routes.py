@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from models.pokemon import Pokemon
 from classes.requests_handler import requests_handler
-from redis.redis import rd
+from redis_client.redis import rd
 import json
 router = APIRouter()
 
@@ -22,7 +22,7 @@ def get_pokemon(pokemon_id: int):
             return json.loads(cache)
         else:
             response = requests_handler.get_pokemon_by_id(pokemon_id)
-            rd.set(url_key, response)
+            rd.set(url_key, json.dumps(response))
             return response
     except Exception:
         raise HTTPException(500, detail="Server error")
@@ -44,7 +44,7 @@ def get_pokemon(pokemon_name: str):
             return json.loads(cache)
         else:
             response = requests_handler.get_pokemon_by_name(pokemon_name)
-            rd.set(url_key, response)
+            rd.set(url_key, json.dumps(response))
             return response
     except Exception:
         raise HTTPException(500, detail="Server error")
@@ -82,7 +82,7 @@ def get_pokemon_by_type(pokemon_type: str):
         return json.loads(cache)
     else:
         response =  requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/type", type=pokemon_type)
-        rd.set(url_key, response)
+        rd.set(url_key, json.dumps(response))
         return response
 
 @router.get('/pokemons/trainer')
@@ -101,5 +101,5 @@ def get_pokemon_by_trainer(trainer_name: str):
         return json.loads(cache)
     else:
         response = requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/trainer", trainer_name=trainer_name)
-        rd.set(url_key, response)
+        rd.set(url_key, json.dumps(response))
         return response
