@@ -1,13 +1,26 @@
 import requests
 from models.pokemon import Pokemon
 from models.trainer import Trainer
+from api.evolution_fns import get_pokemon_details
 import base64
 
 class RequestsHandler:
     def __init__(self):
         pass
     # get the pokemon properties and image from databases servers
-    def get_pokemon(self, pokemon_name):
+    def get_pokemon_by_id(self, pokemon_id: int):
+        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon/{pokemon_id}")
+        pokemon_properties = response.json()
+        response_image  = requests.get(f"http://mongodb_gridfs_server-myreader-1:5002/image?pokemon_name={pokemon_properties['name']}")
+        image_data = response_image.content
+        encoded_image = base64.b64encode(image_data).decode('utf-8')
+        response_data = {
+            "properties": pokemon_properties,
+            "image": encoded_image
+        }
+        return response_data
+
+    def get_pokemon_by_name(self, pokemon_name):
         response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon?pokemon_name={pokemon_name}")
         pokemon_properties = response.json()
         response_image  = requests.get(f"http://mongodb_gridfs_server-myreader-1:5002/image?pokemon_name={pokemon_name}")
@@ -54,6 +67,11 @@ class RequestsHandler:
         return response.json()
     # evolve the pokemon of a certain trainer
     def evolution(self,trainer_name: str, pokemon_name: str, next_evolution: str):
+        next_pokemon = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon?pokemon_name={next_evolution}")
+        if next_pokemon.status_code == 404:
+            pokemon_details = get_pokemon_details(next_evolution)
+            pokemon = Pokemon(pokemon_details["name"], pokemon_details["type"], pokemon_details["weight"], pokemon_details["height"])
+            self.add_pokemon(pokemon)
         response = requests.put(f"http://pokemon_api-mypokemonserver-1:5000/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
         return response.json()
     # migrate the data fro json file to sql database and get each pokemons image from poke api and save it in gridfs mongodb server

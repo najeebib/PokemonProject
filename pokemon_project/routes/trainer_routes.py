@@ -9,14 +9,14 @@ router = APIRouter()
 @router.post('/trainer')
 def add_trainer(trainer: Trainer):
     """
-    Send request to pokemon server to get trainers to of the given pokemon
+    Send request to pokemon server to add trainer to db
 
     Parameters:
-    - pokemon_name: the pokemon name.
+    - trainer: the Trainer object.
     """
     if type(trainer) == Trainer:
         return requests_handler.add_trainer(trainer)
-    raise HTTPException(400, detail="Ivalid pokemon name")
+    raise HTTPException(400, detail="Ivalid trainer")
 
 @router.get('/trainers')
 def get_trainers(pokemon_name: str):
@@ -46,9 +46,15 @@ def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):
     - trainer_name: trainer name.
     - pokemon_name: pokemon name.
     """
+    
     try:
         if type(trainer_name) == str and type(pokemon_name) == str:
-            return requests_handler.add_pokemon_to_trainer(trainer_name, pokemon_name)
+            response = requests_handler.add_pokemon_to_trainer(trainer_name, pokemon_name)
+            trainers_url = f"/trainers?pokemon_name={pokemon_name}"
+            pokemon_url = f"/pokemons/trainer?trainer_name={trainer_name}"
+            rd.delete(trainers_url)
+            rd.delete(pokemon_url)
+            return response
         raise HTTPException(400, detail="Ivalid pokemon or trainer name")
     except Exception:
         raise HTTPException(500, detail="Server error")
@@ -64,5 +70,10 @@ def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str):
     - pokemon_name: pokemon name.
     """
     if type(trainer_name) == str and type(pokemon_name) == str:
-        return requests_handler.delete_pokemon_from_trainer(trainer_name, pokemon_name)
+        response = requests_handler.delete_pokemon_from_trainer(trainer_name, pokemon_name)
+        trainers_url = f"/trainers?pokemon_name={pokemon_name}"
+        pokemon_url = f"/pokemons/trainer?trainer_name={trainer_name}"
+        rd.delete(trainers_url)
+        rd.delete(pokemon_url)
+        return response
     raise HTTPException(400, detail="Ivalid pokemon or trainer name")

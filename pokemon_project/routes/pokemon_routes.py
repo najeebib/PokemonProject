@@ -5,6 +5,28 @@ from redis.redis import rd
 import json
 router = APIRouter()
 
+@router.get('/pokemon/{pokemon_id:int}')
+def get_pokemon(pokemon_id: int):
+    """
+    Send request to pokemon server to get pokemon from the database
+
+    Parameters:
+    - pokemon_name: the pokemon name.
+    """
+    try:
+        if type(pokemon_id) != int:
+            raise HTTPException(400, detail="Ivalid pokemon name")
+        url_key = f"/pokemon/{pokemon_id}"
+        cache = rd.get(url_key)
+        if cache:
+            return json.loads(cache)
+        else:
+            response = requests_handler.get_pokemon_by_id(pokemon_id)
+            rd.set(url_key, response)
+            return response
+    except Exception:
+        raise HTTPException(500, detail="Server error")
+
 @router.get('/pokemon')
 def get_pokemon(pokemon_name: str):
     """
@@ -21,7 +43,7 @@ def get_pokemon(pokemon_name: str):
         if cache:
             return json.loads(cache)
         else:
-            response = requests_handler.get_pokemon(pokemon_name)
+            response = requests_handler.get_pokemon_by_name(pokemon_name)
             rd.set(url_key, response)
             return response
     except Exception:
@@ -37,7 +59,10 @@ def add_pokemon(pokemon: Pokemon):
     """
     status = requests_handler.add_pokemon(pokemon)
     if status == 201:
-        return {f"Status code: {status}","pokemon was added to the database"}
+        response = {f"Status code: {status}","pokemon was added to the database"}
+        pokemon_types_url = f"/pokemons/type?pokemon_type={pokemon.type}"
+        rd.delete(pokemon_types_url)
+        return response
     return status
     
 

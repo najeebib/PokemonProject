@@ -14,6 +14,11 @@ def select_pokemon(db: Session, pokemon_name: str):
     result = db.execute(text(f"SELECT * FROM `pokemons` WHERE name = '{pokemon_name}'")).fetchone()
     return result._mapping
 
+def select_pokemon_by_id(db: Session, pokemon_id: int):
+    result = db.execute(text(f"SELECT * FROM `pokemons` WHERE pokemon_id = '{pokemon_id}'")).fetchone()
+    return result._mapping
+
+
 
 def select_pokemons_by_type(db: Session, pokemon_type: str):
     query = text("""
