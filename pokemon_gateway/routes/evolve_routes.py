@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from classes.requests_handler import requests_handler
 import api.evolution_fns as evolve_functions
-from redis.redis import rd
+from redis_client.redis import rd
 router = APIRouter()
 
 @router.put('/evolution')
@@ -22,7 +22,7 @@ def evolve(trainer_name: str, pokemon_name: str):
 
         trainers_url = f"/trainers?pokemon_name={pokemon_name}"
         pokemon_url = f"/pokemons/trainer?trainer_name={trainer_name}"
-        pokemon_types_url = f"/pokemons/type?pokemon_type={next_pokemon["type"]}"
+        pokemon_types_url = f"/pokemons/type?pokemon_type={next_pokemon['type']}"
         rd.delete(pokemon_types_url)
         rd.delete(trainers_url)
         rd.delete(pokemon_url)

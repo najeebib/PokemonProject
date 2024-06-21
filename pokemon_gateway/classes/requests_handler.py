@@ -9,9 +9,9 @@ class RequestsHandler:
         pass
     # get the pokemon properties and image from databases servers
     def get_pokemon_by_id(self, pokemon_id: int):
-        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon/{pokemon_id}")
+        response = requests.get(f"http://pokemon_api-pokemon-api-1:5001/pokemon/{pokemon_id}")
         pokemon_properties = response.json()
-        response_image  = requests.get(f"http://mongodb_gridfs_server-myreader-1:5002/image?pokemon_name={pokemon_properties['name']}")
+        response_image  = requests.get(f"http://images_server-images-server-1:5002/image?pokemon_name={pokemon_properties['name']}")
         image_data = response_image.content
         encoded_image = base64.b64encode(image_data).decode('utf-8')
         response_data = {
@@ -21,9 +21,9 @@ class RequestsHandler:
         return response_data
 
     def get_pokemon_by_name(self, pokemon_name):
-        response = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon?pokemon_name={pokemon_name}")
+        response = requests.get(f"http://pokemon_api-pokemon-api-1:5001/pokemon?pokemon_name={pokemon_name}")
         pokemon_properties = response.json()
-        response_image  = requests.get(f"http://mongodb_gridfs_server-myreader-1:5002/image?pokemon_name={pokemon_name}")
+        response_image  = requests.get(f"http://images_server-images-server-1:5002/image?pokemon_name={pokemon_name}")
         image_data = response_image.content
         encoded_image = base64.b64encode(image_data).decode('utf-8')
         response_data = {
@@ -33,7 +33,7 @@ class RequestsHandler:
         return response_data
     # add the pokemon and image to databases servers
     def add_pokemon(self, pokemon: Pokemon):
-        response = requests.post("http://pokemon_api-mypokemonserver-1:5000/pokemon", json=pokemon.model_dump())
+        response = requests.post("http://pokemon_api-pokemon-api-1:5001/pokemon", json=pokemon.model_dump())
 
         res = requests.get("https://pokeapi.co/api/v2/pokemon/" + pokemon.name).json()
         image_url = res["sprites"]["front_default"]
@@ -43,7 +43,7 @@ class RequestsHandler:
         encoded_image = base64.b64encode(content).decode('utf-8')
         pokemon = {"name": pokemon.name, "content": encoded_image}
 
-        added_response = requests.post("http://mongodb_gridfs_server-myreader-1:5002/image", json=pokemon)
+        added_response = requests.post("http://images_server-images-server-1:5002/image", json=pokemon)
         return added_response.json()
     
     # send get request to the server to get data 
@@ -55,28 +55,28 @@ class RequestsHandler:
         return response.json()
     # add traienr to database
     def add_trainer(self, trainer: Trainer):
-        response = requests.post("http://pokemon_api-mypokemonserver-1:5000/trainer", json=trainer.model_dump())
+        response = requests.post("http://pokemon_api-pokemon-api-1:5001/trainer", json=trainer.model_dump())
         return response.json()
     # add pokemon to trainer  
     def add_pokemon_to_trainer(self, trainer_name: str, pokemon_name: str):
-        response = requests.post(f"http://pokemon_api-mypokemonserver-1:5000/trainer/pokemon?trainer_name={trainer_name}&pokemon_name={pokemon_name}")
+        response = requests.post(f"http://pokemon_api-pokemon-api-1:5001/trainer/pokemon?trainer_name={trainer_name}&pokemon_name={pokemon_name}")
         return response.json()
     # delete pokemon from trainer
     def delete_pokemon_from_trainer(self,trainer_name: str, pokemon_name: str):
-        response = requests.delete(f"http://pokemon_api-mypokemonserver-1:5000/trainer/pokemon?trainer_name={trainer_name}&pokemon_name={pokemon_name}")
+        response = requests.delete(f"http://pokemon_api-pokemon-api-1:5001/trainer/pokemon?trainer_name={trainer_name}&pokemon_name={pokemon_name}")
         return response.json()
     # evolve the pokemon of a certain trainer
     def evolution(self,trainer_name: str, pokemon_name: str, next_evolution: str):
-        next_pokemon = requests.get(f"http://pokemon_api-mypokemonserver-1:5000/pokemon?pokemon_name={next_evolution}")
+        next_pokemon = requests.get(f"http://pokemon_api-pokemon-api-1:5001/pokemon?pokemon_name={next_evolution}")
         if next_pokemon.status_code == 404:
             pokemon_details = get_pokemon_details(next_evolution)
             pokemon = Pokemon(pokemon_details["name"], pokemon_details["type"], pokemon_details["weight"], pokemon_details["height"])
             self.add_pokemon(pokemon)
-        response = requests.put(f"http://pokemon_api-mypokemonserver-1:5000/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
+        response = requests.put(f"http://pokemon_api-pokemon-api-1:5001/evolution?trainer_name={trainer_name}&pokemon_name={pokemon_name}&next_evolution={next_evolution}")
         return response.json()
     # migrate the data fro json file to sql database and get each pokemons image from poke api and save it in gridfs mongodb server
     def data_migration(self):
-        response = requests.get("http://pokemon_api-mypokemonserver-1:5000/migration")
+        response = requests.get("http://pokemon_api-pokemon-api-1:5001/migration")
         pokemons_names = response.json()
         # get each pokemon's image from poke api
         pokemons_list = []
@@ -92,7 +92,7 @@ class RequestsHandler:
             pokemons_list.append(pokemon)
 
         pokemons = {"pokemons": pokemons_list}
-        mongo_server_response = requests.post("http://mongodb_gridfs_server-myreader-1:5002/images", json=pokemons)
+        mongo_server_response = requests.post("http://images_server-images-server-1:5002/images", json=pokemons)
         return mongo_server_response.json()
 
 requests_handler = RequestsHandler()
