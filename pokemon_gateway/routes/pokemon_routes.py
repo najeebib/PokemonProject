@@ -81,7 +81,7 @@ def get_pokemon_by_type(pokemon_type: str):
     if cache:
         return json.loads(cache)
     else:
-        response =  requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/type", type=pokemon_type)
+        response =  requests_handler.get_request("http://pokemon_api-pokemon-api-1:5001/pokemons/type", type=pokemon_type)
         rd.set(url_key, json.dumps(response))
         return response
 
@@ -100,6 +100,6 @@ def get_pokemon_by_trainer(trainer_name: str):
     if cache:
         return json.loads(cache)
     else:
-        response = requests_handler.get_request("http://pokemon_api-mypokemonserver-1:5000/pokemons/trainer", trainer_name=trainer_name)
+        response = requests_handler.get_request("http://pokemon_api-pokemon-api-1:5001/pokemons/trainer", trainer_name=trainer_name)
         rd.set(url_key, json.dumps(response))
         return response
