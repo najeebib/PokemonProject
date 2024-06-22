@@ -8,7 +8,7 @@ router = APIRouter()
 @router.get('/pokemon/{pokemon_id:int}')
 def get_pokemon(pokemon_id: int):
     """
-    Send request to pokemon server to get pokemon from the database
+    Check if the user is in the cache if not Send request to pokemon server to get pokemon from the database
 
     Parameters:
     - pokemon_name: the pokemon name.
@@ -30,7 +30,7 @@ def get_pokemon(pokemon_id: int):
 @router.get('/pokemon')
 def get_pokemon(pokemon_name: str):
     """
-    Send request to pokemon server to get pokemon from the database
+    Check if the user is in the cache if not Send request to pokemon server to get pokemon from the database
 
     Parameters:
     - pokemon_name: the pokemon name.
@@ -53,6 +53,7 @@ def get_pokemon(pokemon_name: str):
 def add_pokemon(pokemon: Pokemon):
     """
     Send request to pokemon server to post new pokemon to the database
+    After the pokemon was added to the database, delete the pokemon type from the cache since it's no longer accurate
 
     Parameters:
     - pokemon: the pokemon object.
@@ -69,7 +70,7 @@ def add_pokemon(pokemon: Pokemon):
 @router.get('/pokemons/type')
 def get_pokemon_by_type(pokemon_type: str):
     """
-    Send request to pokemon server to get pokemons by type from the database
+    Check if the pokemons are in the cache if not Send request to pokemon server to get pokemons by type from the database
 
     Parameters:
     - pokemon_type: the pokemon type.
@@ -88,7 +89,7 @@ def get_pokemon_by_type(pokemon_type: str):
 @router.get('/pokemons/trainer')
 def get_pokemon_by_trainer(trainer_name: str):
     """
-    Send request to pokemon server to get pokemons by trainer from the database
+    Check if the pokemons are in the cache if not Send request to pokemon server to get pokemons by trainer from the database
 
     Parameters:
     - trainer_name: the trainer name.
