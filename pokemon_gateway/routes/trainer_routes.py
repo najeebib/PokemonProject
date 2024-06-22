@@ -21,7 +21,7 @@ def add_trainer(trainer: Trainer):
 @router.get('/trainers')
 def get_trainers(pokemon_name: str):
     """
-    Send request to pokemon server to get trainers by pokemon name from the database
+    Check if the trainers are in the cache if not Send request to pokemon server to get trainers by pokemon name from the database
 
     Parameters:
     - trainer: the trainer object.
@@ -41,6 +41,7 @@ def get_trainers(pokemon_name: str):
 def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):
     """
     Send request to pokemon server to insert new trainer pokemon to the trainer
+    After the pokemon was added to the trainer, delete the pokemons and trainers data from the cache since it's no longer accurate
 
     Parameters:
     - trainer_name: trainer name.
@@ -64,6 +65,7 @@ def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):
 def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str):
     """
     Send request to pokemon server to delete  pokemon from the trainer
+    After the pokemon was deleted from the trainer, delete the pokemons and trainers data from the cache since it's no longer accurate
 
     Parameters:
     - trainer_name: trainer name.

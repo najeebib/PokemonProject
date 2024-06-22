@@ -8,6 +8,7 @@ router = APIRouter()
 def evolve(trainer_name: str, pokemon_name: str):
     """
     Send request to the pokemon api to evolve the given pokemon of the given trainer.
+    After the pokemon was evolved, delete the pokemons and trainers data from the cache since it's no longer accurate
 
     Parameters:
     - pokemon_name: name of the pokemon.
