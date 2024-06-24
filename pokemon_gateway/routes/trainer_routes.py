@@ -6,7 +6,7 @@ import json
 
 router = APIRouter()
 
-@router.post('/trainer')
+@router.post('/trainers')
 def add_trainer(trainer: Trainer):
     """
     Send request to pokemon server to add trainer to db
@@ -18,7 +18,7 @@ def add_trainer(trainer: Trainer):
         return requests_handler.add_trainer(trainer)
     raise HTTPException(400, detail="Ivalid trainer")
 
-@router.get('/trainers')
+@router.get('/trainers/{pokemon_name}')
 def get_trainers(pokemon_name: str):
     """
     Check if the trainers are in the cache if not Send request to pokemon server to get trainers by pokemon name from the database
@@ -28,16 +28,16 @@ def get_trainers(pokemon_name: str):
     """
     if type(pokemon_name) != str:
         raise HTTPException(400, detail="Ivalid pokemon name")
-    url_key = f"/trainers?pokemon_name={pokemon_name}"
+    url_key = f"/trainers/{pokemon_name}"
     cache = rd.get(url_key)
     if cache:
         return json.loads(cache)
     else:
-        response = requests_handler.get_request("http://pokemon_api-pokemon-api-1:5001/trainers", pokemon_name=pokemon_name)
+        response = requests_handler.get_request(f"http://pokemon_api-pokemon-api-1:5001/trainers/{pokemon_name}")
         rd.set(url_key, json.dumps(response))
         return response
 
-@router.post('/trainer/pokemon')
+@router.post('/trainers/{trainer_name}/pokemons')
 def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):
     """
     Send request to pokemon server to insert new trainer pokemon to the trainer
@@ -51,8 +51,8 @@ def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):
     try:
         if type(trainer_name) == str and type(pokemon_name) == str:
             response = requests_handler.add_pokemon_to_trainer(trainer_name, pokemon_name)
-            trainers_url = f"/trainers?pokemon_name={pokemon_name}"
-            pokemon_url = f"/pokemons/trainer?trainer_name={trainer_name}"
+            trainers_url = f"/trainers/{pokemon_name}"
+            pokemon_url = f"/pokemons/trainers/{trainer_name}"
             rd.delete(trainers_url)
             rd.delete(pokemon_url)
             return response
@@ -61,7 +61,7 @@ def add_trainer_to_pokemon(trainer_name: str, pokemon_name: str):
         raise HTTPException(500, detail="Server error")
 
 
-@router.delete('/trainer/pokemon')
+@router.delete('/trainers/{trainer_name}/pokemons/{pokemon_name}')
 def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str):
     """
     Send request to pokemon server to delete  pokemon from the trainer
@@ -73,8 +73,8 @@ def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str):
     """
     if type(trainer_name) == str and type(pokemon_name) == str:
         response = requests_handler.delete_pokemon_from_trainer(trainer_name, pokemon_name)
-        trainers_url = f"/trainers?pokemon_name={pokemon_name}"
-        pokemon_url = f"/pokemons/trainer?trainer_name={trainer_name}"
+        trainers_url = f"/trainers/{pokemon_name}"
+        pokemon_url = f"/pokemons/trainers/{trainer_name}"
         rd.delete(trainers_url)
         rd.delete(pokemon_url)
         return response

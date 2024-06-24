@@ -43,7 +43,7 @@ def slecte_pokemons_by_trainer(db: Session, trainer_name: str):
         ORDER BY pokemon.name
     """)
     result = db.execute(query, {"trainer_name": trainer_name}).fetchall()
-    pokemons = [row._mapping for row in result]
+    pokemons = [row[0] for row in result]
     return pokemons
 
 def select_trainers_by_pokemonName(db: Session, pokemon_name: str):
@@ -56,5 +56,5 @@ def select_trainers_by_pokemonName(db: Session, pokemon_name: str):
         ORDER BY trainer.name
     """)
     result = db.execute(query, {"pokemon_name": pokemon_name}).fetchall()
-    trainers = [row._mapping for row in result]
+    trainers = [row[0] for row in result]
     return trainers

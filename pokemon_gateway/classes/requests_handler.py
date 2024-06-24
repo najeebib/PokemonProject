@@ -9,9 +9,9 @@ class RequestsHandler:
         pass
     # get the pokemon properties and image from databases servers
     def get_pokemon_by_id(self, pokemon_id: int):
-        response = requests.get(f"http://pokemon_api-pokemon-api-1:5001/pokemon/{pokemon_id}")
+        response = requests.get(f"http://pokemon_api-pokemon-api-1:5001/pokemons/{pokemon_id}")
         pokemon_properties = response.json()
-        response_image  = requests.get(f"http://images_server-images-server-1:5002/image?pokemon_name={pokemon_properties['name']}")
+        response_image  = requests.get(f"http://images_server-images-server-1:5002/images/{pokemon_properties['name']}")
         image_data = response_image.content
         encoded_image = base64.b64encode(image_data).decode('utf-8')
         response_data = {
@@ -21,9 +21,9 @@ class RequestsHandler:
         return response_data
 
     def get_pokemon_by_name(self, pokemon_name):
-        response = requests.get(f"http://pokemon_api-pokemon-api-1:5001/pokemon?pokemon_name={pokemon_name}")
+        response = requests.get(f"http://pokemon_api-pokemon-api-1:5001/pokemons/{pokemon_name}")
         pokemon_properties = response.json()
-        response_image  = requests.get(f"http://images_server-images-server-1:5002/image?pokemon_name={pokemon_name}")
+        response_image  = requests.get(f"http://images_server-images-server-1:5002/images/{pokemon_name}")
         image_data = response_image.content
         encoded_image = base64.b64encode(image_data).decode('utf-8')
         response_data = {
@@ -33,7 +33,7 @@ class RequestsHandler:
         return response_data
     # add the pokemon and image to databases servers
     def add_pokemon(self, pokemon: Pokemon):
-        response = requests.post("http://pokemon_api-pokemon-api-1:5001/pokemon", json=pokemon.model_dump())
+        response = requests.post("http://pokemon_api-pokemon-api-1:5001/pokemons", json=pokemon.model_dump())
 
         res = requests.get("https://pokeapi.co/api/v2/pokemon/" + pokemon.name).json()
         image_url = res["sprites"]["front_default"]
@@ -43,27 +43,25 @@ class RequestsHandler:
         encoded_image = base64.b64encode(content).decode('utf-8')
         pokemon = {"name": pokemon.name, "content": encoded_image}
 
-        added_response = requests.post("http://images_server-images-server-1:5002/image", json=pokemon)
+        added_response = requests.post("http://images_server-images-server-1:5002/images", json=pokemon)
         return added_response.json()
     
     # send get request to the server to get data 
     # i have done this like this to avoid repeated code when sending requests to get (pokemons by type/trainer name and get trainers by pokemon name)
-    def get_request(self, url, **kwargs):
-        query = "?"
-        query += "&".join([f"{k}={v}" for k, v in kwargs.items()])
-        response = requests.get(url + query)
+    def get_request(self, url):
+        response = requests.get(url )
         return response.json()
     # add traienr to database
     def add_trainer(self, trainer: Trainer):
-        response = requests.post("http://pokemon_api-pokemon-api-1:5001/trainer", json=trainer.model_dump())
+        response = requests.post("http://pokemon_api-pokemon-api-1:5001/trainers", json=trainer.model_dump())
         return response.json()
     # add pokemon to trainer  
     def add_pokemon_to_trainer(self, trainer_name: str, pokemon_name: str):
-        response = requests.post(f"http://pokemon_api-pokemon-api-1:5001/trainer/pokemon?trainer_name={trainer_name}&pokemon_name={pokemon_name}")
+        response = requests.post(f"http://pokemon_api-pokemon-api-1:5001/trainers/{trainer_name}/pokemons?pokemon_name={pokemon_name}")
         return response.json()
     # delete pokemon from trainer
     def delete_pokemon_from_trainer(self,trainer_name: str, pokemon_name: str):
-        response = requests.delete(f"http://pokemon_api-pokemon-api-1:5001/trainer/pokemon?trainer_name={trainer_name}&pokemon_name={pokemon_name}")
+        response = requests.delete(f"http://pokemon_api-pokemon-api-1:5001/trainers/{trainer_name}/pokemons/{pokemon_name}")
         return response.json()
     # evolve the pokemon of a certain trainer
     def evolution(self,trainer_name: str, pokemon_name: str, next_evolution: str):
@@ -92,7 +90,7 @@ class RequestsHandler:
             pokemons_list.append(pokemon)
 
         pokemons = {"pokemons": pokemons_list}
-        mongo_server_response = requests.post("http://images_server-images-server-1:5002/images", json=pokemons)
+        mongo_server_response = requests.post("http://images_server-images-server-1:5002/images/migration", json=pokemons)
         return mongo_server_response.json()
 
 requests_handler = RequestsHandler()

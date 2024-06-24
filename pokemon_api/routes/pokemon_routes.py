@@ -8,7 +8,7 @@ import utils.insert_queries as insert_functions
 
 router = APIRouter()
 
-@router.get('/pokemon/{pokemon_id:int}')
+@router.get('/pokemons/{pokemon_id:int}')
 def get_pokemon(pokemon_id: int, db: Session = Depends(get_db)):
     """
     Get pokemon from the database
@@ -18,7 +18,7 @@ def get_pokemon(pokemon_id: int, db: Session = Depends(get_db)):
     """
     return select_functions.select_pokemon_by_id(db, pokemon_id)
 
-@router.get('/pokemon')
+@router.get('/pokemons/{pokemon_name:str}')
 def get_pokemon(pokemon_name: str, db: Session = Depends(get_db)):
     """
     Get pokemon from the database
@@ -28,7 +28,7 @@ def get_pokemon(pokemon_name: str, db: Session = Depends(get_db)):
     """
     return select_functions.select_pokemon(db, pokemon_name)
 
-@router.post('/pokemon')
+@router.post('/pokemons')
 def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
     """
     Post new pokemon to the database
@@ -53,17 +53,17 @@ def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
         insert_functions.insert_into_PokemonTypes_table(db, pokemon_id, type_id)
         return {f"Status code: {status.HTTP_201_CREATED}","pokemon was added to the database"}
 
-@router.get('/pokemons/type')
-def get_pokemon_by_type(type: str,db: Session = Depends(get_db)):
+@router.get('/pokemons/types/{pokemon_type}')
+def get_pokemon_by_type(pokemon_type: str,db: Session = Depends(get_db)):
     """
     get pokemons to of the given type
 
     Parameters:
     - type: the type of the pokemon.
     """
-    return select_functions.select_pokemons_by_type(db, type)
+    return select_functions.select_pokemons_by_type(db, pokemon_type)
 
-@router.get('/pokemons/trainer')
+@router.get('/pokemons/trainers/{trainer_name}')
 def get_pokemon_by_trainer(trainer_name: str, db: Session = Depends(get_db)):
     """
     get pokemons to of the given trainer

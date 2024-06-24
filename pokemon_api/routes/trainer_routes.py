@@ -9,7 +9,7 @@ import utils.insert_queries as insert_functions
 
 router = APIRouter()
 
-@router.get('/trainer/{pokemon_name}')
+@router.get('/trainers/{pokemon_name}')
 def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
     """
     get trainers to of the given pokemon
@@ -19,7 +19,7 @@ def get_trainers(pokemon_name: str, db: Session = Depends(get_db)):
     """
     return select_functions.select_trainers_by_pokemonName(db, pokemon_name)
 
-@router.post('/trainer')
+@router.post('/trainers')
 def add_trainer(trainer: Trainer, db: Session = Depends(get_db)):
     """
     Insert new trainer to the database
@@ -33,7 +33,7 @@ def add_trainer(trainer: Trainer, db: Session = Depends(get_db)):
     else:
         raise HTTPException(409, detail="Trainer already exists")
 
-@router.post('/trainer/pokemon')
+@router.post('/trainers/{trainer_name}/pokemons')
 def add_pokemon_to_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
     """
     Insert new trainer pokemon to the trainer
@@ -53,7 +53,7 @@ def add_pokemon_to_trainer(trainer_name: str, pokemon_name: str, db: Session = D
         else:
              raise HTTPException(403, detail="Trainer already has this pokemon")
 
-@router.delete('/trainer/pokemon')
+@router.delete('/trainers/{trainer_name}/pokemons/{pokemon_name}')
 def delete_pokemon_from_trainer(trainer_name: str, pokemon_name: str, db: Session = Depends(get_db)):
     """
     delete  pokemon from the trainer

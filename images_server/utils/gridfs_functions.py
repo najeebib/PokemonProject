@@ -11,4 +11,6 @@ def get_pokemon_image(pokemon_name: str):
     return out_data
 
 def insert_pokemons_image(pokemon_name: str, content: bytes):
-    mongo_api.fs.put(content, filename=pokemon_name)
+    data = mongo_api.pokemon_images_collection.find_one({"filename": pokemon_name})
+    if not data:
+        mongo_api.fs.put(content, filename=pokemon_name)

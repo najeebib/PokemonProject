@@ -21,9 +21,9 @@ def evolve(trainer_name: str, pokemon_name: str):
 
         response = requests_handler.evolution(trainer_name, pokemon_name, next_evolution)
 
-        trainers_url = f"/trainers?pokemon_name={pokemon_name}"
-        pokemon_url = f"/pokemons/trainer?trainer_name={trainer_name}"
-        pokemon_types_url = f"/pokemons/type?pokemon_type={next_pokemon['type']}"
+        trainers_url = f"/trainers/{pokemon_name}"
+        pokemon_url = f"/pokemons/trainers/{trainer_name}"
+        pokemon_types_url = f"/pokemons/types/{next_pokemon['type']}"
         rd.delete(pokemon_types_url)
         rd.delete(trainers_url)
         rd.delete(pokemon_url)
