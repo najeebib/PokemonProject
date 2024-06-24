@@ -7,7 +7,7 @@ import json
 router = APIRouter()
 
 
-@router.get('/image')
+@router.get('/images/{pokemon_name}')
 def get_pokemon(pokemon_name: str):
     """
     Send request to mongodb server to get pokemon image from the database
@@ -23,7 +23,7 @@ def get_pokemon(pokemon_name: str):
         if cache:
             return json.loads(cache)
         else:
-            response_image =  requests_handler.get_request("http://images_server-images-server-1:5002/image", pokemon_name=pokemon_name)
+            response_image =  requests_handler.get_request(f"http://images_server-images-server-1:5002//images/{pokemon_name}")
             image_data = response_image.content
             encoded_image = base64.b64encode(image_data).decode('utf-8')
             rd.set(url_key, json.dumps(encoded_image))
