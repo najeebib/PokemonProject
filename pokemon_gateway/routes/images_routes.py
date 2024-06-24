@@ -3,7 +3,7 @@ from classes.requests_handler import requests_handler
 import base64
 from redis_client.redis import rd
 import json
-
+import requests
 router = APIRouter()
 
 
@@ -23,10 +23,15 @@ def get_pokemon(pokemon_name: str):
         if cache:
             return json.loads(cache)
         else:
-            response_image =  requests_handler.get_request(f"http://images_server-images-server-1:5002//images/{pokemon_name}")
+            response_image = requests.get(f"http://images_server-images-server-1:5002/images/{pokemon_name}")
+            if response_image.status_code != 200:
+                raise HTTPException(404, detail="Pokemon not found")
+            
             image_data = response_image.content
             encoded_image = base64.b64encode(image_data).decode('utf-8')
-            rd.set(url_key, json.dumps(encoded_image))
-            return response_image
+            response = {"image": encoded_image}
+            rd.set(url_key, json.dumps(response))
+            return response
+
     except Exception:
         raise HTTPException(500, detail="Server error")

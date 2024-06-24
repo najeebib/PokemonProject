@@ -3,20 +3,19 @@ from routes import pokemon_routes
 from routes import evolve_routes
 from routes import trainer_routes
 from routes import images_routes
+from routes import data_migration_routes
 from classes.requests_handler import requests_handler
 
 
-async def lifespan(app: FastAPI):
-    print(requests_handler.data_migration())
-    yield
     
-app  = FastAPI(lifespan=lifespan)
+app  = FastAPI()
 
 
 app.include_router(pokemon_routes.router)
 app.include_router(trainer_routes.router)
 app.include_router(evolve_routes.router)
 app.include_router(images_routes.router)
+app.include_router(data_migration_routes.router)
 
 
 @app.middleware("http")
