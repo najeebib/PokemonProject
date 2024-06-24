@@ -33,6 +33,6 @@ def insert_pokemons_images(pokemons: PokemonsList):
             content = base64.b64decode(content)
             name = pokemon["name"]
             gridfs_functions.insert_pokemons_image(name, content)
-            return {f"Status code: {status.HTTP_201_CREATED}","pokemons were added to the database"}
+        return {f"Status code: {status.HTTP_201_CREATED}","pokemons were added to the database"}
     except Exception:
         raise HTTPException(500, detail="Server error when isnerting pokemon images")
