@@ -25,4 +25,4 @@ async def log_req(request:Request, call_next):
 
 @app.get("/")
 def root():
-    return "hi from fast api"
+    return "Welcome to Pokemons World"
