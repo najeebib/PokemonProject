@@ -16,7 +16,10 @@ def get_pokemon(pokemon_id: int, db: Session = Depends(get_db)):
     Parameters:
     - pokemon_name: the pokemon name.
     """
-    return select_functions.select_pokemon_by_id(db, pokemon_id)
+    pokemon = select_functions.select_pokemon_by_id(db, pokemon_id)
+    if pokemon:
+        return pokemon
+    raise HTTPException(404, detail="Pokemon doesnt exist")
 
 @router.get('/pokemons/{pokemon_name:str}')
 def get_pokemon(pokemon_name: str, db: Session = Depends(get_db)):
@@ -26,7 +29,10 @@ def get_pokemon(pokemon_name: str, db: Session = Depends(get_db)):
     Parameters:
     - pokemon_name: the pokemon name.
     """
-    return select_functions.select_pokemon(db, pokemon_name)
+    pokemon = select_functions.select_pokemon(db, pokemon_name)
+    if pokemon:
+        return pokemon
+    raise HTTPException(404, detail="Pokemon doesnt exist")
 
 @router.post('/pokemons')
 def add_pokemon(pokemon: Pokemon, db: Session = Depends(get_db)):
